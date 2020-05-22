@@ -1,2 +1,2 @@
 # shiroDemo
-springBoot前后端分离
+springBoot集成shiro前后端分离
