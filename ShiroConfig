@@ -3,7 +3,7 @@
 * @version 创建时间：2020年5月20日 上午9:06:48
 * 
 */
-package com.bkjz.config;
+package shiroDemo;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-import com.bkjz.fliter.MyPermissionsAuthorizationFilter;
-import com.bkjz.fliter.UrlAuthFilter;
+import shiroDemo.fliter.MyPermissionsAuthorizationFilter;
+import shiroDemo.fliter.UrlAuthFilter;
 @Configuration
 public class ShiroConfig {
 	
