@@ -1,0 +1,26 @@
+/**
+* @author XiangZhi Ning
+* @version 创建时间：2020年5月20日 上午9:29:43
+* 
+*/
+package com.bkjz.util;
+
+import org.apache.shiro.authc.AuthenticationException;
+
+public class AuthoenticException extends AuthenticationException {
+	private static final long serialVersionUID = 1L;
+
+public AuthoenticException(String message) {
+	 super(message);
+}
+
+public AuthoenticException(String message, Throwable cause) {
+    super(message, cause);
+}
+
+public AuthoenticException(Throwable cause) {
+    super(cause);
+}
+
+
+}
