@@ -1,0 +1,103 @@
+/**
+* @author XiangZhi Ning
+* @version 创建时间：2020年5月20日 上午9:18:46
+* 
+*/
+package com.bkjz.config;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
+
+import com.bkjz.mainmanage.service.UserSignService;
+import com.bkjz.util.AuthoenticException;
+import com.bkjz.yhgl.entity.User;
+
+
+public class CustomRealm extends AuthorizingRealm{
+  // 登录service
+	@Resource
+  private UserSignService userSignService;
+	private SimpleAuthenticationInfo simpleAuthenticationInfo;
+  
+ /**
+* @User user实体，包含权限、角色、用户信息
+* 
+*/ 
+  
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		  String username = (String) SecurityUtils.getSubject().getPrincipal();
+	        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+	        List<User> userActions = userSignService.db1selectAction(username);
+	    if (userActions!=null) {
+	        Set<String> stringSet = new HashSet<>();
+	        for (User userAction :userActions) {
+	        	stringSet.add(userAction.getManagerName());	
+	        	
+			}
+	        info.setStringPermissions(stringSet);
+		}
+	        return info;
+	}
+/**
+*@AuthoenticException 自定义RuntimeException
+*
+*/
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+		 String userName = (String) token.getPrincipal();
+	        String userPwd = new String((char[]) token.getCredentials());
+	        String password = "";
+	        ByteSource salt = null;
+	        User user = userSignService.db1checkPassword(userName, userPwd);
+			if (user != null) {
+				salt = ByteSource.Util.bytes(userName+"data");
+				password = user.getPassword();
+			}
+			if (userName == null || "null".equals(userName)) {
+	            throw new AuthoenticException("1");
+	        } else if (!userPwd.equals(password )) {
+	            throw new AuthoenticException("2");
+	        }
+			simpleAuthenticationInfo = new SimpleAuthenticationInfo(user.getUserId(), password, salt, getName());
+			return simpleAuthenticationInfo;
+	}
+  
+/**
+*@Override isPermitted
+*/
+	@Override
+    public boolean isPermitted(PrincipalCollection principals, String permission) {
+		 AuthorizationInfo info = getAuthorizationInfo(principals);
+	        return isPermitted(permission, info);
+	}
+    
+    protected boolean isPermitted(String permission, AuthorizationInfo info) {
+        Collection<Permission> perms = getPermissions(info);
+        if (perms != null && !perms.isEmpty()) {
+            for (Permission perm : perms) {
+                if (perm.toString().equals(permission)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+}
