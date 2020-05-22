@@ -3,7 +3,7 @@
 * @version 创建时间：2020年5月20日 上午9:29:43
 * 
 */
-package com.bkjz.util;
+package shiroDemo;
 
 import org.apache.shiro.authc.AuthenticationException;
 
