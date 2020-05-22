@@ -3,7 +3,7 @@
 * @version 创建时间：2020年5月20日 上午9:18:46
 * 
 */
-package com.bkjz.config;
+package shiroDemo.config;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,9 +24,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
-import com.bkjz.mainmanage.service.UserSignService;
-import com.bkjz.util.AuthoenticException;
-import com.bkjz.yhgl.entity.User;
+import shiroDemo.service.UserSignService;
+import shiroDemo.AuthoenticException;
+import shiroDemo.User;
 
 
 public class CustomRealm extends AuthorizingRealm{
