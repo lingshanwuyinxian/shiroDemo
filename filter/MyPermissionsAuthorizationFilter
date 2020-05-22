@@ -1,0 +1,48 @@
+/**
+* @author XiangZhi Ning
+* @version 创建时间：2020年5月22日 上午10:17:15
+* 
+*/
+package com.bkjz.fliter;
+
+import java.io.IOException;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.authz.AuthorizationFilter;
+
+import com.bkjz.mainmanage.service.UserSignService;
+
+
+public class MyPermissionsAuthorizationFilter extends AuthorizationFilter {
+	@Resource
+   	private UserSignService userSignService;
+	@Override
+	    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
+	  
+	    	Subject subject = getSubject(request, response); 
+	    	String[] perms = (String[]) mappedValue;
+	        boolean isPermitted = true;
+	        if (perms != null && perms.length > 0) {
+	            if (perms.length == 1) {
+	                if (!subject.isPermitted(perms[0])) {
+	                    isPermitted = false;
+	                }
+	            } else {
+	            	 isPermitted = false;
+	            	for (int j = 0; j < perms.length; j++) {
+	            		if (subject.isPermitted(perms[j])) {
+		                    isPermitted = true;
+		                 }	 
+	            		 
+					}
+	            	 
+	            }
+	        }
+	      return isPermitted;
+	    }
+	
+}
