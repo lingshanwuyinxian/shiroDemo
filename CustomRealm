@@ -56,7 +56,7 @@ public class CustomRealm extends AuthorizingRealm{
 	        return info;
 	}
 /**
-*@AuthoenticException 自定义RuntimeException
+*@AuthoenticException 继承AuthenticationException
 *
 */
 	@Override
